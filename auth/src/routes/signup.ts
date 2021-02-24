@@ -44,10 +44,7 @@ router.get(
       jwt: userJwt,
     };
 
-    res.status(201).send({
-      id: user.id,
-      email: user.email,
-    });
+    res.status(201).send(user);
   }
 );
 
