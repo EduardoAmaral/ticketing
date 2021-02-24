@@ -16,7 +16,7 @@ router.post(
     body("email").isEmail().withMessage("Email must be valid"),
     body("password")
       .trim()
-      .isEmpty()
+      .notEmpty()
       .withMessage("Password is required"),
   ],
   validateRequest,
