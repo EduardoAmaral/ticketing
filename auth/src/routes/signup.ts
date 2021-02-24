@@ -8,7 +8,7 @@ import { createSession } from "../services/session";
 
 const router = express.Router();
 
-router.get(
+router.post(
   "/api/users/signup",
   [
     body("email").isEmail().withMessage("Email must be valid"),
