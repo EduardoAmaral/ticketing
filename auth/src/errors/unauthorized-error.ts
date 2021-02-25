@@ -4,12 +4,12 @@ export class UnauthorizedError extends CustomError {
   statusCode = 401;
 
   constructor() {
-    super("Invalid Session");
+    super("Not Authorized");
 
     Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
 
   serializeErrors() {
-    return [{ message: "Invalid Session" }];
+    return [{ message: "Not Authorized" }];
   }
 }
