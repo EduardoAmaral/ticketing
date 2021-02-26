@@ -1,12 +1,12 @@
 import request from 'supertest';
 import app from '../../app';
 
-const ROUTE = '/api/users/signup';
+const SIGNUP_ROUTE = '/api/users/signup';
 
 describe('SignUp Router', () => {
   it('returns a 201 on successful singup', () => {
     return request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
         password: 'password',
@@ -16,7 +16,7 @@ describe('SignUp Router', () => {
 
   it('sets a cookie after successful singup', async () => {
     const response = await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
         password: 'password',
@@ -28,7 +28,7 @@ describe('SignUp Router', () => {
 
   it('should not set cookie if signup fails', async () => {
     const response = await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@.com',
         password: 'password',
@@ -40,7 +40,7 @@ describe('SignUp Router', () => {
 
   it('returns a 400 with an invalid email', async () => {
     const response = await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test.com',
         password: 'password',
@@ -53,7 +53,7 @@ describe('SignUp Router', () => {
 
   it('returns a 400 with a password that has less than 8 characteres', async () => {
     const response = await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
         password: '1',
@@ -68,7 +68,7 @@ describe('SignUp Router', () => {
 
   it('returns a 400 with a password that has more than 32 characteres', async () => {
     const response = await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
         password: '1234567890123456789012345678901234567890',
@@ -83,14 +83,14 @@ describe('SignUp Router', () => {
 
   it('returns 400 with missing email and password', async () => {
     await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         password: '12345678',
       })
       .expect(400);
 
     await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
       })
@@ -99,7 +99,7 @@ describe('SignUp Router', () => {
 
   it('disallows dupicate emails', async () => {
     await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
         password: 'password',
@@ -107,7 +107,7 @@ describe('SignUp Router', () => {
       .expect(201);
 
     const response = await request(app)
-      .post(ROUTE)
+      .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
         password: 'password',
