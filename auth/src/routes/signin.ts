@@ -1,23 +1,19 @@
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
-import jwt from "jsonwebtoken";
-import { BadRequestError } from "../errors/bad-request-error";
-import { validateRequest } from "../middlewares/validate-request";
+import express, { Request, Response } from 'express';
+import { body } from 'express-validator';
+import { BadRequestError } from '../errors/bad-request-error';
+import { validateRequest } from '../middlewares/validate-request';
 
-import { User } from "../models/user";
-import { Password } from "../services/password";
-import { createSession } from "../services/session";
+import { User } from '../models/user';
+import { Password } from '../services/password';
+import { createSession } from '../services/session';
 
 const router = express.Router();
 
 router.post(
-  "/api/users/signin",
+  '/api/users/signin',
   [
-    body("email").isEmail().withMessage("Email must be valid"),
-    body("password")
-      .trim()
-      .notEmpty()
-      .withMessage("Password is required"),
+    body('email').isEmail().withMessage('Email must be valid'),
+    body('password').trim().notEmpty().withMessage('Password must be provided'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -25,12 +21,12 @@ router.post(
 
     const user = await User.findOne({ email });
 
-    if (user && Password.compare(user.password, password)) {
+    if (user && (await Password.matches(user.password, password))) {
       createSession(req, user);
 
       res.status(200).send(user);
     } else {
-      throw new BadRequestError("Invalid credentials");
+      throw new BadRequestError('Invalid credentials');
     }
   }
 );
