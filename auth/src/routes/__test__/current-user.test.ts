@@ -17,4 +17,8 @@ describe('Current User Route', () => {
     expect(response.body.id).toBeDefined();
     expect(response.body.email).toEqual('test@test.com');
   });
+
+  it('returns 401 when user is not logged in', () => {
+    return request(app).get(CURRENT_USER_ROUTE).send().expect(401);
+  });
 });
