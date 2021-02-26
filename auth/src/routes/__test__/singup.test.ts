@@ -14,6 +14,30 @@ describe('SignUp Router', () => {
       .expect(201);
   });
 
+  it('sets a cookie after successful singup', async () => {
+    const response = await request(app)
+      .post(ROUTE)
+      .send({
+        email: 'test@test.com',
+        password: 'password',
+      })
+      .expect(201);
+
+    expect(response.get('Set-Cookie')).toBeDefined();
+  });
+
+  it('should not set cookie if signup fails', async () => {
+    const response = await request(app)
+      .post(ROUTE)
+      .send({
+        email: 'test@.com',
+        password: 'password',
+      })
+      .expect(400);
+
+    expect(response.get('Set-Cookie')).toBeUndefined();
+  });
+
   it('returns a 400 with an invalid email', async () => {
     const response = await request(app)
       .post(ROUTE)
