@@ -1,21 +1,21 @@
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
+import express, { Request, Response } from 'express';
+import { body } from 'express-validator';
 
-import { BadRequestError } from "../errors/bad-request-error";
-import { validateRequest } from "../middlewares/validate-request";
-import { User } from "../models/user";
-import { createSession } from "../services/session";
+import { BadRequestError } from '../errors/bad-request-error';
+import { validateRequest } from '../middlewares/validate-request';
+import { User } from '../models/user';
+import { createSession } from '../services/session';
 
 const router = express.Router();
 
 router.post(
-  "/api/users/signup",
+  '/api/users/signup',
   [
-    body("email").isEmail().withMessage("Email must be valid"),
-    body("password")
+    body('email').isEmail().withMessage('Email must be valid'),
+    body('password')
       .trim()
       .isLength({ min: 8, max: 32 })
-      .withMessage("Password must be between 8 and 32 characters"),
+      .withMessage('Password must have between 8 and 32 characters'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -24,7 +24,7 @@ router.post(
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw new BadRequestError("Email already in use");
+      throw new BadRequestError('Email already in use');
     }
 
     const user = User.build({ email, password });
