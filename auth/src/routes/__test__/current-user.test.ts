@@ -1,19 +1,12 @@
 import request from 'supertest';
 import app from '../../app';
+import { signup } from '../../test/auth-helper';
 
 const CURRENT_USER_ROUTE = '/api/users/currentUser';
 
 describe('Current User Route', () => {
-  it('clears the cookie after signout', async () => {
-    const authResponse = await request(app)
-      .post('/api/users/signup')
-      .send({
-        email: 'test@test.com',
-        password: 'password',
-      })
-      .expect(201);
-
-    const cookie = authResponse.get('Set-Cookie');
+  it('returns the current user', async () => {
+    const cookie = await signup();
 
     const response = await request(app)
       .get(CURRENT_USER_ROUTE)

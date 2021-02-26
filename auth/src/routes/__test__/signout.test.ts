@@ -1,17 +1,12 @@
 import request from 'supertest';
 import app from '../../app';
+import { signup } from '../../test/auth-helper';
 
 const SIGN_OUT_ROUTE = '/api/users/signout';
 
 describe('SignOut Route', () => {
   it('clears the cookie after signout', async () => {
-    await request(app)
-      .post('/api/users/signup')
-      .send({
-        email: 'test@test.com',
-        password: 'password',
-      })
-      .expect(201);
+    await signup();
 
     const response = await request(app)
       .post(SIGN_OUT_ROUTE)
