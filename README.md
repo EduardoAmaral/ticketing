@@ -8,3 +8,14 @@ Features:
 4. When a user attempts to purchase a ticket, the ticket is locked for 15 minutes. The user has 15 minutes to enter their payment info.
 5. While locked, no other users can purchase the ticket. After 15 minutes, the ticket should be unlocked. Should not display locked tickets
 6. Ticket prices can be edited if they are not locked
+
+Tech Stack
+* NodeJs
+* Express
+* TypeScript
+* MongoDB
+* Jest
+* Docker
+* Kubernetes
+* Nginx-ingress
+* Skaffold
