@@ -6,6 +6,10 @@ name: Node.js Package
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'common/**'
+      - '!README.md'
+      - '.github/workflows/common-publish.yml'
 
 defaults:
   run:

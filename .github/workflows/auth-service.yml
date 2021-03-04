@@ -6,6 +6,10 @@ name: Node.js CI
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'auth/**'
+      - '!README.md'
+      - '.github/workflows/auth-service.yml'
   pull_request:
     branches: [ main ]
     
