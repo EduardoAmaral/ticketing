@@ -15,7 +15,7 @@
     ]
   },
   "keywords": [],
-  "author": "",
+  "author": "Eduardo Amaral",
   "license": "ISC",
   "dependencies": {
     "@types/cookie-session": "^2.0.42",
