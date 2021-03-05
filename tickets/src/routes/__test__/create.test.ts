@@ -25,4 +25,64 @@ describe('New Ticket Route', () => {
 
     expect(response.status).not.toEqual(401);
   });
+
+  it('returns an error if an invalid title is provided', async () => {
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession())
+      .send({
+        price: 100,
+      });
+
+    expect(response.status).toEqual(400);
+    expect(response.body[0].message).toEqual('Title is required');
+    expect(response.body[0].field).toEqual('title');
+  });
+
+  it('returns an error if price is not provided', async () => {
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession())
+      .send({
+        title: 'Title',
+      });
+
+    expect(response.status).toEqual(400);
+    expect(response.body[0].message).toEqual(
+      'Price should be numeric and greater than 0'
+    );
+    expect(response.body[0].field).toEqual('price');
+  });
+
+  it('returns an error if price is lower than 0', async () => {
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession())
+      .send({
+        title: 'Title',
+        price: -1,
+      });
+
+    expect(response.status).toEqual(400);
+    expect(response.body[0].message).toEqual(
+      'Price should be numeric and greater than 0'
+    );
+    expect(response.body[0].field).toEqual('price');
+  });
+
+  it('returns an error if price is not numeric', async () => {
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession())
+      .send({
+        title: 'Title',
+        price: 'A',
+      });
+
+    expect(response.status).toEqual(400);
+    expect(response.body[0].message).toEqual(
+      'Price should be numeric and greater than 0'
+    );
+    expect(response.body[0].field).toEqual('price');
+  });
 });
