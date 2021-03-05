@@ -7,3 +7,4 @@ export * from './errors/unauthorized-error';
 export * from './middlewares/current-user';
 export * from './middlewares/error-handler';
 export * from './middlewares/validate-request';
+export * from './middlewares/require-auth';
