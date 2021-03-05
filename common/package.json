@@ -1,6 +1,6 @@
 {
   "name": "@eamaral/ticketing-common",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -8,7 +8,7 @@
     "build/**/*"
   ],
   "scripts": {
-    "clean": "del ./buidl/*",
+    "clean": "del ./build/*",
     "build": "npm run clean && tsc",
     "test": ""
   },
