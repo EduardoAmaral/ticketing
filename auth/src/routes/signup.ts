@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-
 import { BadRequestError, validateRequest } from '@eamaral/ticketing-common';
+
 import { User } from '../models/user';
 import { createSession } from '../services/session';
 

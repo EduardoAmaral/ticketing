@@ -2,12 +2,12 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
+import { errorHandler, NotFoundError } from '@eamaral/ticketing-common';
 
 import { signUpRouter } from './routes/signup';
 import { signInRouter } from './routes/signin';
 import { signOutRouter } from './routes/signout';
 import { currentUserRouter } from './routes/current-user';
-import { errorHandler , NotFoundError } from '@eamaral/ticketing-common';
 
 const app = express();
 
