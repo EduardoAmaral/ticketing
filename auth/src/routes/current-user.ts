@@ -1,10 +1,10 @@
 import express from 'express';
 
-import { currentUser } from '@eamaral/ticketing-common';
+import { currentUser, requireAuth } from '@eamaral/ticketing-common';
 
 const router = express.Router();
 
-router.get('/api/users/currentuser', currentUser, (req, res) => {
+router.get('/api/users/currentuser', currentUser, requireAuth, (req, res) => {
   res.send(req.currentUser);
 });
 
