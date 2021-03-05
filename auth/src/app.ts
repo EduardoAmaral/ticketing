@@ -7,8 +7,7 @@ import { signUpRouter } from './routes/signup';
 import { signInRouter } from './routes/signin';
 import { signOutRouter } from './routes/signout';
 import { currentUserRouter } from './routes/current-user';
-import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+import { errorHandler , NotFoundError } from '@eamaral/ticketing-common';
 
 const app = express();
 
