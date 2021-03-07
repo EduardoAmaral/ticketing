@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../../app';
+import { User } from '../../models/user';
 
 const SIGNUP_ROUTE = '/api/users/signup';
 
@@ -98,19 +99,19 @@ describe('SignUp Router', () => {
   });
 
   it('disallows dupicate emails', async () => {
-    await request(app)
-      .post(SIGNUP_ROUTE)
-      .send({
-        email: 'test@test.com',
-        password: 'password',
-      })
-      .expect(201);
+    const email = 'test@test.com';
+    const password = 'anythign';
+
+    await User.build({
+      email,
+      password,
+    }).save();
 
     const response = await request(app)
       .post(SIGNUP_ROUTE)
       .send({
-        email: 'test@test.com',
-        password: 'password',
+        email,
+        password,
       })
       .expect(400);
 
