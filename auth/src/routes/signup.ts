@@ -13,8 +13,10 @@ router.post(
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')
       .trim()
-      .isLength({ min: 8, max: 32 })
-      .withMessage('Password must have between 8 and 32 characters'),
+      .isStrongPassword()
+      .withMessage(
+        'Password must be at least 8 characters long with a minimum of one uppercase, one lowercase, one numeric and one symbol'
+      ),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

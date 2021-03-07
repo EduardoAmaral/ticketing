@@ -10,7 +10,7 @@ describe('SignUp Router', () => {
       .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
-        password: 'password',
+        password: '#3aBq13l',
       })
       .expect(201);
   });
@@ -20,7 +20,7 @@ describe('SignUp Router', () => {
       .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
-        password: 'password',
+        password: '#3aBq13l',
       })
       .expect(201);
 
@@ -32,19 +32,19 @@ describe('SignUp Router', () => {
       .post(SIGNUP_ROUTE)
       .send({
         email: 'test@.com',
-        password: 'password',
+        password: '#3aBq13l',
       })
       .expect(400);
 
     expect(response.get('Set-Cookie')).toBeUndefined();
   });
 
-  it('returns a 400 with an invalid email', async () => {
+  it('returns 400 with an invalid email', async () => {
     const response = await request(app)
       .post(SIGNUP_ROUTE)
       .send({
         email: 'test.com',
-        password: 'password',
+        password: '#3aBq13l',
       })
       .expect(400);
 
@@ -52,7 +52,7 @@ describe('SignUp Router', () => {
     expect(response.body[0].field).toBe('email');
   });
 
-  it('returns a 400 with a password that has less than 8 characteres', async () => {
+  it('returns 400 with a password that has less than 8 characteres', async () => {
     const response = await request(app)
       .post(SIGNUP_ROUTE)
       .send({
@@ -62,22 +62,22 @@ describe('SignUp Router', () => {
       .expect(400);
 
     expect(response.body[0].message).toBe(
-      'Password must have between 8 and 32 characters'
+      'Password must be at least 8 characters long with a minimum of one uppercase, one lowercase, one numeric and one symbol'
     );
     expect(response.body[0].field).toBe('password');
   });
 
-  it('returns a 400 with a password that has more than 32 characteres', async () => {
+  it('returns 400 with a weak password', async () => {
     const response = await request(app)
       .post(SIGNUP_ROUTE)
       .send({
         email: 'test@test.com',
-        password: '1234567890123456789012345678901234567890',
+        password: 'password',
       })
       .expect(400);
 
     expect(response.body[0].message).toBe(
-      'Password must have between 8 and 32 characters'
+      'Password must be at least 8 characters long with a minimum of one uppercase, one lowercase, one numeric and one symbol'
     );
     expect(response.body[0].field).toBe('password');
   });
@@ -86,7 +86,7 @@ describe('SignUp Router', () => {
     await request(app)
       .post(SIGNUP_ROUTE)
       .send({
-        password: '12345678',
+        password: '#3aBq13l',
       })
       .expect(400);
 
@@ -100,7 +100,7 @@ describe('SignUp Router', () => {
 
   it('disallows dupicate emails', async () => {
     const email = 'test@test.com';
-    const password = 'anythign';
+    const password = '#3aBq13l';
 
     await User.build({
       email,

@@ -65,7 +65,7 @@ describe('SignIn Route', () => {
       .post(SIGN_IN_ROUTE)
       .send({
         email: 'test@test.com',
-        password: 'password',
+        password: '#3aBq13l',
       })
       .expect(200);
 
