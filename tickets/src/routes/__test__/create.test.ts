@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
+import { Ticket } from '../../model/ticket';
 
 const ROUTE = '/api/tickets';
 
@@ -84,5 +85,28 @@ describe('New Ticket Route', () => {
       'Price should be numeric and greater than 0'
     );
     expect(response.body[0].field).toEqual('price');
+  });
+
+  it('creates a ticket with valid inputs', async () => {
+    let tickets = await Ticket.find({});
+    expect(tickets.length).toEqual(0);
+
+    const title = 'My Ticket';
+    const price = 1000;
+
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession())
+      .send({
+        title,
+        price,
+      });
+
+    expect(response.status).toEqual(201);
+
+    const { id } = response.body;
+    tickets = await Ticket.find({ id });
+    expect(tickets[0].title).toEqual(title);
+    expect(tickets[0].price).toEqual(price);
   });
 });
