@@ -9,6 +9,7 @@ import {
 } from '@eamaral/ticketing-common';
 
 import { createTicketRouter } from './routes/create';
+import { showTicketRouter } from './routes/show';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(
 app.use(currentUser);
 
 app.use(createTicketRouter);
+app.use(showTicketRouter);
 
 app.all('*', () => {
   throw new NotFoundError();
