@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-const getFakeSession = (): string[] => {
+const getFakeSession = (id: string = '1'): string[] => {
   const payload = {
-    id: '1',
+    id,
     email: 'test@test.com',
   };
 
