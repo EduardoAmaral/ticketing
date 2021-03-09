@@ -103,10 +103,12 @@ describe('New Ticket Route', () => {
       });
 
     expect(response.status).toEqual(201);
+    expect(response.body.id).toBeDefined();
+    expect(response.body.title).toEqual(title);
+    expect(response.body.price).toEqual(price);
 
-    const { id } = response.body;
-    tickets = await Ticket.find({ id });
-    expect(tickets[0].title).toEqual(title);
-    expect(tickets[0].price).toEqual(price);
+    const newTicket = await Ticket.findById(response.body.id);
+    expect(newTicket.title).toEqual(title);
+    expect(newTicket.price).toEqual(price);
   });
 });
