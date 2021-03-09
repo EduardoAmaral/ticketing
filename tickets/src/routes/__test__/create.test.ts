@@ -36,7 +36,7 @@ describe('New Ticket Route', () => {
       });
 
     expect(response.status).toEqual(400);
-    expect(response.body[0].message).toEqual('Title is required');
+    expect(response.body[0].message).toEqual('Title must be provided');
     expect(response.body[0].field).toEqual('title');
   });
 

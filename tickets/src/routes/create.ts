@@ -9,7 +9,7 @@ router.post(
   '/api/tickets',
   requireAuth,
   [
-    body('title').not().isEmpty().withMessage('Title is required'),
+    body('title').not().isEmpty().withMessage('Title must be provided'),
     body('price')
       .isInt({ gt: 0 })
       .withMessage('Price should be numeric and greater than 0'),
