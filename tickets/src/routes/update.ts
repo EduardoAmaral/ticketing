@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import {
+  ForbiddenError,
   NotFoundError,
   requireAuth,
-  UnauthorizedError,
   validateRequest,
 } from '@eamaral/ticketing-common';
 import { Ticket } from '../model/ticket';
@@ -28,7 +28,7 @@ router.put(
     }
 
     if (ticket.userId !== req.currentUser!.id) {
-      throw new UnauthorizedError();
+      throw new ForbiddenError();
     }
 
     ticket.set({

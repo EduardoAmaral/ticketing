@@ -27,7 +27,7 @@ describe('Update Route', () => {
     expect(response.status).toEqual(401);
   });
 
-  it('does not update the ticket and returns 401 if the the user does not own the ticket', async () => {
+  it('does not update the ticket and returns 403 if the the user does not own the ticket', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
 
     const ticket = await Ticket.build({
@@ -46,7 +46,7 @@ describe('Update Route', () => {
 
     const notUpdatedTicket = await Ticket.findById(ticket.id);
 
-    expect(response.status).toEqual(401);
+    expect(response.status).toEqual(403);
     expect(notUpdatedTicket.title).toEqual(ticket.title);
     expect(notUpdatedTicket.price).toEqual(ticket.price);
   });
