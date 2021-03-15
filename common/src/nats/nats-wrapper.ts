@@ -1,5 +1,4 @@
 import nats, { Stan } from 'node-nats-streaming';
-import { natsWrapper } from './__mocks__/nats-wrapper';
 
 class NatsWrapper {
   private _client?: Stan;
