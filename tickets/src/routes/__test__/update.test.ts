@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
+import { natsWrapper } from '@eamaral/ticketing-common';
 import app from '../../app';
 import { Ticket } from '../../model/ticket';
 import { getFakeSession } from '../../test/fake-session';
@@ -116,5 +117,27 @@ describe('Update Route', () => {
     expect(response.body.id).toEqual(ticket.id);
     expect(response.body.title).toEqual('New Title');
     expect(response.body.price).toEqual(1);
+  });
+
+  it('publishes a ticket updated event after update a ticket successfully', async () => {
+    const userId = new mongoose.Types.ObjectId().toHexString();
+
+    const ticket = await Ticket.build({
+      title: 'Ticket From Another Person',
+      price: 1000,
+      userId,
+    }).save();
+
+    const response = await request(app)
+      .put(`${ROUTE}/${ticket.id}`)
+      .set('Cookie', getFakeSession(userId))
+      .send({
+        title: 'New Title',
+        price: 1,
+      });
+
+    expect(response.status).toEqual(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
