@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
 import { Ticket } from '../../model/ticket';
+import { natsWrapper } from '@eamaral/ticketing-common';
 
 const ROUTE = '/api/tickets';
 
@@ -110,5 +111,25 @@ describe('New Ticket Route', () => {
     const newTicket = await Ticket.findById(response.body.id);
     expect(newTicket.title).toEqual(title);
     expect(newTicket.price).toEqual(price);
+  });
+
+  it('publishes a ticket created event after create a ticket successfully', async () => {
+    let tickets = await Ticket.find({});
+    expect(tickets.length).toEqual(0);
+
+    const title = 'My Ticket';
+    const price = 1000;
+
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession())
+      .send({
+        title,
+        price,
+      });
+
+    expect(response.status).toEqual(201);
+
+    // expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
