@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { randomBytes } from 'crypto';
 
 import app from './app';
 import { natsWrapper } from '@eamaral/ticketing-common';
@@ -23,6 +22,10 @@ const start = async () => {
 
   if (!process.env.NATS_URL) {
     throw new Error('NATS_URL must be defined');
+  }
+
+  if (!process.env.ORDER_EXPIRATION_IN_MINUTES) {
+    throw new Error('ORDER_EXPIRATION_IN_MINUTES must be defined');
   }
 
   await mongoose.connect(process.env.MONGO_URI, {

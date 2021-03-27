@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import mongoose from 'mongoose';
+import { add } from 'date-fns';
 
 import { Ticket } from '../model/ticket';
 import {
@@ -40,10 +41,14 @@ router.post(
       throw new BusinessValidationError('Ticket is already reserved');
     }
 
+    const expiration = add(new Date(), {
+      minutes: Number(process.env.ORDER_EXPIRATION_IN_MINUTES),
+    });
+
     const order = Order.build({
       status: OrderStatus.Created,
       userId: req.currentUser!.id,
-      expiresAt: new Date(),
+      expiresAt: expiration,
       ticket: ticket,
     });
 

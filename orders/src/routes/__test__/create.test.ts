@@ -4,6 +4,7 @@ import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
 import { Ticket } from '../../model/ticket';
 import { Order, OrderStatus } from '../../model/order';
+import { add, differenceInMinutes } from 'date-fns';
 
 const ROUTE = '/api/orders';
 
@@ -209,5 +210,36 @@ describe('Create Order Route', () => {
     expect(newOrder.expiresAt).toBeDefined();
     expect(newOrder.ticket.title).toEqual(ticket.title);
     expect(newOrder.ticket.price).toEqual(ticket.price);
+  });
+
+  it('sets expiresAt within x minutes, based on ', async () => {
+    const userId = new mongoose.Types.ObjectId().toHexString();
+    const ticket = await Ticket.build({
+      title: 'Ticket',
+      price: 1000,
+    }).save();
+
+    const expiresAt = add(new Date(), {
+      minutes: Number(process.env.ORDER_EXPIRATION_IN_MINUTES!),
+    });
+
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession(userId))
+      .send({
+        ticketId: ticket.id,
+      });
+
+    expect(response.status).toEqual(201);
+    expect(response.body.status).toEqual(OrderStatus.Created);
+    expect(
+      differenceInMinutes(expiresAt, new Date(response.body.expiresAt))
+    ).toEqual(-0);
+
+    const newOrder = await Order.findById(response.body.id).populate('ticket');
+    expect(newOrder.status).toEqual(OrderStatus.Created);
+    expect(
+      differenceInMinutes(expiresAt, new Date(newOrder.expiresAt))
+    ).toEqual(-0);
   });
 });

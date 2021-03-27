@@ -7,6 +7,7 @@ let mongo: any;
 beforeAll(async () => {
   jest.clearAllMocks();
   process.env.JWT_SECRET = 'whatevertestsecret';
+  process.env.ORDER_EXPIRATION_IN_MINUTES = '15';
 
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();

@@ -26,6 +26,8 @@ spec:
                   fieldPath: metadata.name
             - name: NATS_URL
               value: 'http://nats-srv:4222'
+            - name: ORDER_EXPIRATION_IN_MINUTES
+              value: '15'
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
