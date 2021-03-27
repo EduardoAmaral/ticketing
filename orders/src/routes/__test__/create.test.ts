@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
 
-const ROUTE = '/api/tickets';
+const ROUTE = '/api/orders';
 
 describe('Create Order Route', () => {
   it('has a route handler listening to /api/orders for post requests', async () => {
