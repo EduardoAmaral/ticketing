@@ -5,6 +5,7 @@ import { getFakeSession } from '../../test/fake-session';
 import { Ticket } from '../../model/ticket';
 import { Order, OrderStatus } from '../../model/order';
 import { add, differenceInMinutes } from 'date-fns';
+import each from 'jest-each';
 
 const ROUTE = '/api/orders';
 
@@ -70,80 +71,37 @@ describe('Create Order Route', () => {
     );
   });
 
-  it('returns a 422 if there is already a ticket AwaitingPayment', async () => {
-    const userId = new mongoose.Types.ObjectId().toHexString();
-    const ticket = await Ticket.build({
-      title: 'Ticket',
-      price: 1000,
-    }).save();
+  each([
+    OrderStatus.Created,
+    OrderStatus.AwaitingPayment,
+    OrderStatus.Complete,
+  ]).it(
+    'returns a 422 if there is already a ticket "%s"',
+    async (status: OrderStatus) => {
+      const userId = new mongoose.Types.ObjectId().toHexString();
+      const ticket = await Ticket.build({
+        title: 'Ticket',
+        price: 1000,
+      }).save();
 
-    await Order.build({
-      userId: userId,
-      status: OrderStatus.AwaitingPayment,
-      expiresAt: new Date(),
-      ticket: ticket,
-    }).save();
+      await Order.build({
+        userId: userId,
+        status: status,
+        expiresAt: new Date(),
+        ticket: ticket,
+      }).save();
 
-    const response = await request(app)
-      .post(ROUTE)
-      .set('Cookie', getFakeSession())
-      .send({
-        ticketId: ticket.id,
-      });
+      const response = await request(app)
+        .post(ROUTE)
+        .set('Cookie', getFakeSession())
+        .send({
+          ticketId: ticket.id,
+        });
 
-    expect(response.status).toEqual(422);
-    expect(response.body[0].message).toEqual('Ticket is already reserved');
-  });
-
-  it('returns a 422 if there is already a ticket created', async () => {
-    const userId = new mongoose.Types.ObjectId().toHexString();
-    const ticket = await Ticket.build({
-      title: 'Ticket',
-      price: 1000,
-    }).save();
-
-    await Order.build({
-      userId: userId,
-      status: OrderStatus.Created,
-      expiresAt: new Date(),
-      ticket: ticket,
-    }).save();
-
-    const response = await request(app)
-      .post(ROUTE)
-      .set('Cookie', getFakeSession())
-      .send({
-        ticketId: ticket.id,
-      });
-
-    expect(response.status).toEqual(422);
-    expect(response.body[0].message).toEqual('Ticket is already reserved');
-  });
-
-  it('returns a 422 if there is already a ticket complete', async () => {
-    const userId = new mongoose.Types.ObjectId().toHexString();
-    const ticket = await Ticket.build({
-      title: 'Ticket',
-      price: 1000,
-    }).save();
-
-    await Order.build({
-      userId: userId,
-      status: OrderStatus.Complete,
-      expiresAt: new Date(),
-      ticket: ticket,
-    }).save();
-
-    const response = await request(app)
-      .post(ROUTE)
-      .set('Cookie', getFakeSession())
-      .send({
-        ticketId: ticket.id,
-      });
-
-    expect(response.status).toEqual(422);
-    expect(response.body[0].message).toEqual('Ticket is already reserved');
-  });
+      expect(response.status).toEqual(422);
+      expect(response.body[0].message).toEqual('Ticket is already reserved');
+    }
+  );
 
   it('creates an order when there is a cancelled order for the ticket', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
