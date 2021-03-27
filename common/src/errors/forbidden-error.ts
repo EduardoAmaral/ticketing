@@ -1,15 +1,16 @@
-import { CustomError } from "./custom-error";
+import { CustomError } from './custom-error';
 
 export class ForbiddenError extends CustomError {
   statusCode = 403;
 
-  constructor() {
-    super("User does not have permission to access this");
-
-    Object.setPrototypeOf(this, ForbiddenError.prototype);
+  constructor(
+    public message: string = 'User does not have permission to access this resource'
+  ) {
+    super(message);
+    Object.setPrototypeOf(this, CustomError.prototype);
   }
 
   serializeErrors() {
-    return [{ message: "User does not have permission to access this" }];
+    return [{ message: this.message }];
   }
 }
