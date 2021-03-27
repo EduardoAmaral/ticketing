@@ -3,8 +3,7 @@ import mongoose from 'mongoose';
 import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
 import { Ticket } from '../../model/ticket';
-import { OrderStatus } from '@eamaral/ticketing-common';
-import { Order } from '../../model/order';
+import { Order, OrderStatus } from '../../model/order';
 
 const ROUTE = '/api/orders';
 

@@ -6,11 +6,10 @@ import { Ticket } from '../model/ticket';
 import {
   BusinessValidationError,
   NotFoundError,
-  OrderStatus,
   requireAuth,
   validateRequest,
 } from '@eamaral/ticketing-common';
-import { Order } from '../model/order';
+import { Order, OrderStatus } from '../model/order';
 
 const router = express.Router();
 
@@ -35,14 +34,9 @@ router.post(
       throw new NotFoundError('TicketId provided does not exist');
     }
 
-    const pendingOrder = await Order.findOne({
-      ticket: ticket,
-      status: {
-        $ne: OrderStatus.Cancelled,
-      },
-    });
+    const isTicketReserved = await ticket.isReserved();
 
-    if (pendingOrder) {
+    if (isTicketReserved) {
       throw new BusinessValidationError('Ticket is already reserved');
     }
 
