@@ -1,16 +1,61 @@
-import { requireAuth, validateRequest } from '@eamaral/ticketing-common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import mongoose from 'mongoose';
+
+import { Ticket } from '../model/ticket';
+import {
+  BusinessValidationError,
+  NotFoundError,
+  OrderStatus,
+  requireAuth,
+  validateRequest,
+} from '@eamaral/ticketing-common';
+import { Order } from '../model/order';
 
 const router = express.Router();
 
 router.post(
   '/api/orders',
   requireAuth,
-  [body('ticketId').not().isEmpty().withMessage('Ticket must be provided')],
+  [
+    body('ticketId')
+      .not()
+      .isEmpty()
+      .withMessage('TicketId must be provided')
+      .custom((id: string) => mongoose.Types.ObjectId.isValid(id))
+      .withMessage('TicketId invalid'),
+  ],
   validateRequest,
   async (req: Request, res: Response) => {
-    res.status(201).send({});
+    const { ticketId } = req.body;
+
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      throw new NotFoundError('TicketId provided does not exist');
+    }
+
+    const pendingOrder = await Order.findOne({
+      ticket: ticket,
+      status: {
+        $ne: OrderStatus.Cancelled,
+      },
+    });
+
+    if (pendingOrder) {
+      throw new BusinessValidationError('Ticket is already reserved');
+    }
+
+    const order = Order.build({
+      status: OrderStatus.Created,
+      userId: req.currentUser!.id,
+      expiresAt: new Date(),
+      ticket: ticket,
+    });
+
+    await order.save();
+
+    res.status(201).send(order);
   }
 );
 
