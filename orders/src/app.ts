@@ -9,6 +9,7 @@ import {
 } from '@eamaral/ticketing-common';
 
 import { createOrderRouter } from './routes/create';
+import { listOrderRouter } from './routes/list';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(
 app.use(currentUser);
 
 app.use(createOrderRouter);
+app.use(listOrderRouter);
 
 app.all('*', () => {
   throw new NotFoundError();
