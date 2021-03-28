@@ -11,6 +11,7 @@ import {
 import { createOrderRouter } from './routes/create';
 import { listOrderRouter } from './routes/list';
 import { showOrderRouter } from './routes/show';
+import { cancelOrderRouter } from './routes/cancel';
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(currentUser);
 app.use(createOrderRouter);
 app.use(listOrderRouter);
 app.use(showOrderRouter);
+app.use(cancelOrderRouter);
 
 app.all('*', () => {
   throw new NotFoundError();

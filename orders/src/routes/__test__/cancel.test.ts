@@ -5,11 +5,13 @@ import { getFakeSession } from '../../test/fake-session';
 import { Ticket } from '../../model/ticket';
 import { Order, OrderStatus } from '../../model/order';
 
-const ROUTE = '/api/orders';
+const ROUTE = '/api/orders/:id/cancel';
 
-describe('Show Order Route', () => {
+describe('Cancel Order Route', () => {
   it('returns 401 if the user is NOT signed in', async () => {
-    const response = await request(app).get(ROUTE).send({});
+    const response = await request(app)
+      .patch(ROUTE.replace(':id', '1'))
+      .send({});
 
     expect(response.status).toEqual(401);
   });
@@ -18,7 +20,7 @@ describe('Show Order Route', () => {
     const id = new mongoose.Types.ObjectId().toHexString();
 
     const response = await request(app)
-      .get(`${ROUTE}/${id}`)
+      .patch(ROUTE.replace(':id', id))
       .set('Cookie', getFakeSession())
       .send();
 
@@ -28,7 +30,7 @@ describe('Show Order Route', () => {
 
   it('should return 400 for invalid ids', async () => {
     const response = await request(app)
-      .get(`${ROUTE}/1`)
+      .patch(ROUTE.replace(':id', '1'))
       .set('Cookie', getFakeSession())
       .send();
 
@@ -52,14 +54,14 @@ describe('Show Order Route', () => {
     }).save();
 
     const response = await request(app)
-      .get(`${ROUTE}/${royKimOrder.id}`)
+      .patch(ROUTE.replace(':id', royKimOrder.id))
       .set('Cookie', getFakeSession(currentUserId))
       .send();
 
     expect(response.status).toEqual(403);
   });
 
-  it('should retrieve an order', async () => {
+  it('should cancel an order', async () => {
     const currentUserId = new mongoose.Types.ObjectId().toHexString();
     const now = new Date();
     const aimerTicket = await Ticket.build({
@@ -75,7 +77,7 @@ describe('Show Order Route', () => {
     }).save();
 
     const response = await request(app)
-      .get(`${ROUTE}/${aimerOrder.id}`)
+      .patch(ROUTE.replace(':id', aimerOrder.id))
       .set('Cookie', getFakeSession(currentUserId))
       .send();
 
@@ -83,7 +85,7 @@ describe('Show Order Route', () => {
     expect(response.body.expiresAt).toEqual(now.toISOString());
     expect(response.body.id).toEqual(aimerOrder.id);
     expect(response.body.userId).toEqual(currentUserId);
-    expect(response.body.status).toEqual(OrderStatus.Created);
+    expect(response.body.status).toEqual(OrderStatus.Cancelled);
     expect(response.body.ticket.id).toEqual(aimerTicket.id);
     expect(response.body.ticket.title).toEqual(aimerTicket.title);
     expect(response.body.ticket.price).toEqual(aimerTicket.price);
