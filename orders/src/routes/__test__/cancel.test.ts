@@ -4,6 +4,7 @@ import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
 import { Ticket } from '../../model/ticket';
 import { Order, OrderStatus } from '../../model/order';
+import { natsWrapper } from '@eamaral/ticketing-common';
 
 const ROUTE = '/api/orders/:id/cancel';
 
@@ -89,5 +90,28 @@ describe('Cancel Order Route', () => {
     expect(response.body.ticket.id).toEqual(aimerTicket.id);
     expect(response.body.ticket.title).toEqual(aimerTicket.title);
     expect(response.body.ticket.price).toEqual(aimerTicket.price);
+  });
+
+  it('publishes an order cancelled event after cancel an order successfully', async () => {
+    const currentUserId = new mongoose.Types.ObjectId().toHexString();
+    const aimerTicket = await Ticket.build({
+      price: 1000,
+      title: 'Aimer Concert',
+    }).save();
+
+    const aimerOrder = await Order.build({
+      userId: currentUserId,
+      status: OrderStatus.AwaitingPayment,
+      ticket: aimerTicket,
+    }).save();
+
+    const response = await request(app)
+      .patch(ROUTE.replace(':id', aimerOrder.id))
+      .set('Cookie', getFakeSession(currentUserId))
+      .send();
+
+    expect(response.status).toEqual(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
