@@ -6,6 +6,7 @@ import { Ticket } from '../../model/ticket';
 import { Order, OrderStatus } from '../../model/order';
 import { add, differenceInMinutes } from 'date-fns';
 import each from 'jest-each';
+import { natsWrapper } from '@eamaral/ticketing-common';
 
 const ROUTE = '/api/orders';
 
@@ -184,5 +185,24 @@ describe('Create Order Route', () => {
     expect(
       differenceInMinutes(expiresAt, new Date(newOrder.expiresAt))
     ).toEqual(-0);
+  });
+
+  it('publishes an order created event after create an order successfully', async () => {
+    const userId = new mongoose.Types.ObjectId().toHexString();
+    const ticket = await Ticket.build({
+      title: 'Ticket',
+      price: 1000,
+    }).save();
+
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Cookie', getFakeSession(userId))
+      .send({
+        ticketId: ticket.id,
+      });
+
+    expect(response.status).toEqual(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
