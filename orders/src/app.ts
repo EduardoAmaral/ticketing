@@ -10,6 +10,7 @@ import {
 
 import { createOrderRouter } from './routes/create';
 import { listOrderRouter } from './routes/list';
+import { showOrderRouter } from './routes/show';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(currentUser);
 
 app.use(createOrderRouter);
 app.use(listOrderRouter);
+app.use(showOrderRouter);
 
 app.all('*', () => {
   throw new NotFoundError();
