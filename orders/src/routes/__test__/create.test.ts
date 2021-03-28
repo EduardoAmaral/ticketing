@@ -10,25 +10,10 @@ import each from 'jest-each';
 const ROUTE = '/api/orders';
 
 describe('Create Order Route', () => {
-  it('has a route handler listening to /api/orders for post requests', async () => {
-    const response = await request(app).post(ROUTE).send({});
-
-    expect(response.status).not.toEqual(404);
-  });
-
   it('returns 401 if the user is NOT signed in', async () => {
     const response = await request(app).post(ROUTE).send({});
 
     expect(response.status).toEqual(401);
-  });
-
-  it('should allow user to create ticket if the user is signed in', async () => {
-    const response = await request(app)
-      .post(ROUTE)
-      .set('Cookie', getFakeSession())
-      .send({});
-
-    expect(response.status).not.toEqual(401);
   });
 
   it('returns an error if a ticket ID is NOT provided', async () => {
@@ -55,7 +40,7 @@ describe('Create Order Route', () => {
     expect(response.body[0].field).toEqual('ticketId');
   });
 
-  it('returns a 404 if a ticket does not exist for a given TicketId', async () => {
+  it('rejects a reservation if the given ticket does not exist', async () => {
     const id = new mongoose.Types.ObjectId().toHexString();
 
     const response = await request(app)
@@ -76,7 +61,7 @@ describe('Create Order Route', () => {
     OrderStatus.AwaitingPayment,
     OrderStatus.Complete,
   ]).it(
-    'returns a 422 if there is already a ticket "%s"',
+    'rejects a reservation if there is already an order "%s" for the given ticket',
     async (status: OrderStatus) => {
       const userId = new mongoose.Types.ObjectId().toHexString();
       const ticket = await Ticket.build({
@@ -140,7 +125,7 @@ describe('Create Order Route', () => {
     expect(newOrder.ticket.price).toEqual(ticket.price);
   });
 
-  it('returns 201 when order is created', async () => {
+  it('reserves a ticket', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
     const ticket = await Ticket.build({
       title: 'Ticket',
@@ -170,7 +155,7 @@ describe('Create Order Route', () => {
     expect(newOrder.ticket.price).toEqual(ticket.price);
   });
 
-  it('sets expiresAt within x minutes, based on ', async () => {
+  it('sets an expiration within x minutes based on config', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
     const ticket = await Ticket.build({
       title: 'Ticket',
