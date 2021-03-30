@@ -28,11 +28,15 @@ describe('List Order Route', () => {
     const currentUserId = new mongoose.Types.ObjectId().toHexString();
     const now = new Date();
     const aimerTicket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       price: 1000,
       title: 'Aimer Concert',
     }).save();
 
     const royKimTicket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       price: 5000,
       title: 'Roy Kim Concert',
     }).save();
@@ -86,11 +90,15 @@ describe('List Order Route', () => {
     const anotherUserId = new mongoose.Types.ObjectId().toHexString();
     const now = new Date();
     const huhGakTicket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       price: 1500,
       title: 'HuhGak Concert',
     }).save();
 
     const royKimTicket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       price: 5000,
       title: 'LiSA Concert',
     }).save();

@@ -66,6 +66,8 @@ describe('Create Order Route', () => {
     async (status: OrderStatus) => {
       const userId = new mongoose.Types.ObjectId().toHexString();
       const ticket = await Ticket.build({
+        id: new mongoose.Types.ObjectId().toHexString(),
+        version: 0,
         title: 'Ticket',
         price: 1000,
       }).save();
@@ -92,6 +94,8 @@ describe('Create Order Route', () => {
   it('creates an order when there is a cancelled order for the ticket', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
     const ticket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       title: 'Ticket',
       price: 1000,
     }).save();
@@ -129,6 +133,8 @@ describe('Create Order Route', () => {
   it('reserves a ticket', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
     const ticket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       title: 'Ticket',
       price: 1000,
     }).save();
@@ -159,6 +165,8 @@ describe('Create Order Route', () => {
   it('sets an expiration within x minutes based on config', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
     const ticket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       title: 'Ticket',
       price: 1000,
     }).save();
@@ -190,6 +198,8 @@ describe('Create Order Route', () => {
   it('publishes an order created event after create an order successfully', async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
     const ticket = await Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
       title: 'Ticket',
       price: 1000,
     }).save();
