@@ -1,5 +1,6 @@
 import { OrderStatus } from '@eamaral/ticketing-common';
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { TicketDoc } from './ticket';
 
 interface OrderAttrs {
@@ -31,7 +32,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: Object.values(OrderStatus),
-      default: OrderStatus.Created
+      default: OrderStatus.Created,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
@@ -47,12 +48,14 @@ const orderSchema = new mongoose.Schema(
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.__v;
         delete ret.version;
       },
     },
   }
 );
+
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
