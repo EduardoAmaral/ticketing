@@ -58,7 +58,7 @@ describe('Ticket Updated Listener', () => {
     expect(msg.ack).toHaveBeenCalledTimes(1);
   });
 
-  it('should throw an error if data version is not ordered', async (done) => {
+  it('should throw an error if data version is not ordered', async () => {
     const data: TicketUpdatedEvent['data'] = {
       id: ticketId,
       title: 'Roy Kim Concert',
@@ -71,9 +71,8 @@ describe('Ticket Updated Listener', () => {
       await listener.onMessage(data, msg);
     } catch (err) {
       expect(err.message).toEqual('Ticket not found');
-      return done();
     }
 
-    throw new Error('Should not reach this point');
+    expect(msg.ack).not.toHaveBeenCalled();
   });
 });
