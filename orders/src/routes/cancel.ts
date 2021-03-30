@@ -9,7 +9,7 @@ import {
 import mongoose from 'mongoose';
 import express, { Request, Response } from 'express';
 import { Order } from '../model/order';
-import { OrderCancelledPublisher } from '../events/order-cancelled-publisher';
+import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
 
 const router = express.Router();
 

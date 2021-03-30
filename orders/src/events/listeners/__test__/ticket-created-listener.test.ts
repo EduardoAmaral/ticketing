@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { natsWrapper, TicketCreatedEvent } from '@eamaral/ticketing-common';
 import { TicketCreatedListener } from '../ticket-created-listener';
-import { Ticket } from '../../model/ticket';
+import { Ticket } from '../../../model/ticket';
 
 describe('Ticket Created Listener', () => {
   let listener: TicketCreatedListener;

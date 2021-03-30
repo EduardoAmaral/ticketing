@@ -12,7 +12,7 @@ import {
   natsWrapper,
 } from '@eamaral/ticketing-common';
 import { Order, OrderStatus } from '../model/order';
-import { OrderCreatedPublisher } from '../events/order-created-publisher';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
 
 const router = express.Router();
 
