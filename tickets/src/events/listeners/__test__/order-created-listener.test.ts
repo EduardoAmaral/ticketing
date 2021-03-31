@@ -91,4 +91,22 @@ describe('Order Created Listener', () => {
 
     expect(msg.ack).not.toHaveBeenCalled();
   });
+
+  it('emits a ticket updated event', async () => {
+    const data: OrderCreatedEvent['data'] = {
+      id: new mongoose.Types.ObjectId().toHexString(),
+      version: 0,
+      userId: new mongoose.Types.ObjectId().toHexString(),
+      expiresAt: '2020-01-01',
+      status: OrderStatus.Created,
+      ticket: {
+        id: ticketId,
+        price: 1000,
+      },
+    };
+
+    await listener.onMessage(data, msg);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+  });
 });
