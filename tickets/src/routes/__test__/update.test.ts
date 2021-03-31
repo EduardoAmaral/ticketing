@@ -140,4 +140,26 @@ describe('Update Route', () => {
 
     expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
+
+  it('rejects update if a ticket is already reserved', async () => {
+    const userId = new mongoose.Types.ObjectId().toHexString();
+
+    const ticket = await Ticket.build({
+      title: 'Ticket From Another Person',
+      price: 1000,
+      userId,
+      orderId: new mongoose.Types.ObjectId().toHexString(),
+    }).save();
+
+    const response = await request(app)
+      .put(`${ROUTE}/${ticket.id}`)
+      .set('Cookie', getFakeSession(userId))
+      .send({
+        title: 'New Title',
+        price: 1,
+      });
+
+    expect(response.status).toEqual(422);
+    expect(response.body[0].message).toEqual('Cannot update a reserved ticket');
+  });
 });

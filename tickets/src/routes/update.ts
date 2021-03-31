@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import {
+  BusinessValidationError,
   ForbiddenError,
   natsWrapper,
   NotFoundError,
@@ -33,6 +34,10 @@ router.put(
       throw new ForbiddenError();
     }
 
+    if (ticket.orderId) {
+      throw new BusinessValidationError('Cannot update a reserved ticket');
+    }
+
     ticket.set({
       title: req.body.title,
       price: req.body.price,
@@ -46,7 +51,7 @@ router.put(
       price: ticket.price,
       userId: ticket.userId,
       version: ticket.version,
-      orderId: ticket.orderId
+      orderId: ticket.orderId,
     });
 
     res.send(ticket);
