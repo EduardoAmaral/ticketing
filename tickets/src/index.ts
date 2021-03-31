@@ -3,6 +3,8 @@ import { randomBytes } from 'crypto';
 
 import app from './app';
 import { natsWrapper } from '@eamaral/ticketing-common';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {
@@ -36,6 +38,9 @@ const start = async () => {
     process.env.NATS_CLIENT_ID,
     process.env.NATS_URL
   );
+
+  new OrderCreatedListener(natsWrapper.client).listen();
+  new OrderCancelledListener(natsWrapper.client).listen();
 
   natsWrapper.client.on('close', () => {
     console.log('NATS connection closed');
