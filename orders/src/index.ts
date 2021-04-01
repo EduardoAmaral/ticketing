@@ -4,6 +4,7 @@ import app from './app';
 import { natsWrapper } from '@eamaral/ticketing-common';
 import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
+import { OrderExpiredListener } from './events/listeners/order-expired-listener';
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {
@@ -44,6 +45,7 @@ const start = async () => {
 
   new TicketCreatedListener(natsWrapper.client).listen();
   new TicketUpdatedListener(natsWrapper.client).listen();
+  new OrderExpiredListener(natsWrapper.client).listen();
 
   natsWrapper.client.on('close', () => {
     console.log('NATS connection closed');
