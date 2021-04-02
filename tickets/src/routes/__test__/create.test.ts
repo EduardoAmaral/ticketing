@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
-import { Ticket } from '../../model/ticket';
+import { Ticket } from '../../models/ticket';
 import { natsWrapper } from '@eamaral/ticketing-common';
 
 const ROUTE = '/api/tickets';

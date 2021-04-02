@@ -4,9 +4,9 @@ import {
   Subjects,
 } from '@eamaral/ticketing-common';
 import { Message } from 'node-nats-streaming';
-import { Ticket } from '../../model/ticket';
+import { Ticket } from '../../models/ticket';
 import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher';
-import { queueGroupName } from '../queue-group-name';
+import { queueGroupName } from './queue-group-name';
 
 export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
   subject: Subjects.OrderCancelled = Subjects.OrderCancelled;

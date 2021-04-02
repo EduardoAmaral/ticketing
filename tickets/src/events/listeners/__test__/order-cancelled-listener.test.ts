@@ -6,7 +6,7 @@ import {
   OrderStatus,
 } from '@eamaral/ticketing-common';
 import { OrderCancelledListener } from '../order-cancelled-listener';
-import { Ticket } from '../../../model/ticket';
+import { Ticket } from '../../../models/ticket';
 
 describe('Order Cancelled Listener', () => {
   let listener: OrderCancelledListener;

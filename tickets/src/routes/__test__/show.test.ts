@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import app from '../../app';
-import { Ticket } from '../../model/ticket';
+import { Ticket } from '../../models/ticket';
 
 describe('Show Route', () => {
   it('returns 404 if the ticket is not found', async () => {

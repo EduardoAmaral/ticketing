@@ -2,7 +2,7 @@ import { requireAuth, validateRequest } from '@eamaral/ticketing-common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
-import { Ticket } from '../model/ticket';
+import { Ticket } from '../models/ticket';
 import { natsWrapper } from '@eamaral/ticketing-common';
 
 const router = express.Router();

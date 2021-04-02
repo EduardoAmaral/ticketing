@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { natsWrapper } from '@eamaral/ticketing-common';
 import app from '../../app';
-import { Ticket } from '../../model/ticket';
+import { Ticket } from '../../models/ticket';
 import { getFakeSession } from '../../test/fake-session';
 
 const ROUTE = '/api/tickets';

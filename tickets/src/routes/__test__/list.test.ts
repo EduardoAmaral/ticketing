@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../../app';
-import { Ticket } from '../../model/ticket';
+import { Ticket } from '../../models/ticket';
 import { getFakeSession } from '../../test/fake-session';
 
 describe('Index Route', () => {

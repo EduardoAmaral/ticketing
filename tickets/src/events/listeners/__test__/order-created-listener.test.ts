@@ -6,7 +6,7 @@ import {
   OrderStatus,
 } from '@eamaral/ticketing-common';
 import { OrderCreatedListener } from '../order-created-listener';
-import { Ticket } from '../../../model/ticket';
+import { Ticket } from '../../../models/ticket';
 
 describe('Order Created Listener', () => {
   let listener: OrderCreatedListener;

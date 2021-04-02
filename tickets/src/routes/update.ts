@@ -8,7 +8,7 @@ import {
   requireAuth,
   validateRequest,
 } from '@eamaral/ticketing-common';
-import { Ticket } from '../model/ticket';
+import { Ticket } from '../models/ticket';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 
 const router = express.Router();
