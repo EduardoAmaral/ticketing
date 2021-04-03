@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { natsWrapper, TicketUpdatedEvent } from '@eamaral/ticketing-common';
 import { TicketUpdatedListener } from '../ticket-updated-listener';
-import { Ticket } from '../../../model/ticket';
+import { Ticket } from '../../../models/ticket';
 
 describe('Ticket Updated Listener', () => {
   const ticketId = new mongoose.Types.ObjectId().toHexString();

@@ -1,6 +1,6 @@
 import { requireAuth } from '@eamaral/ticketing-common';
 import express, { Request, Response } from 'express';
-import { Order } from '../model/order';
+import { Order } from '../models/order';
 
 const router = express.Router();
 

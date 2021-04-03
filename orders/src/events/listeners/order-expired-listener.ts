@@ -5,9 +5,9 @@ import {
   natsWrapper,
 } from '@eamaral/ticketing-common';
 import { Message } from 'node-nats-streaming';
-import { Order, OrderStatus } from '../../model/order';
+import { Order, OrderStatus } from '../../models/order';
 import { OrderCancelledPublisher } from '../publishers/order-cancelled-publisher';
-import { orderServiceQueueGroupName } from '../queue-group-name';
+import { orderServiceQueueGroupName } from './queue-group-name';
 
 export class OrderExpiredListener extends Listener<OrderExpiredEvent> {
   subject: Subjects.OrderExpired = Subjects.OrderExpired;

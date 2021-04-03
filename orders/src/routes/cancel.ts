@@ -8,7 +8,7 @@ import {
 } from '@eamaral/ticketing-common';
 import mongoose from 'mongoose';
 import express, { Request, Response } from 'express';
-import { Order } from '../model/order';
+import { Order } from '../models/order';
 import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
 
 const router = express.Router();

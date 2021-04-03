@@ -6,8 +6,8 @@ import {
   OrderStatus,
 } from '@eamaral/ticketing-common';
 import { OrderExpiredListener } from '../order-expired-listener';
-import { Ticket } from '../../../model/ticket';
-import { Order } from '../../../model/order';
+import { Ticket } from '../../../models/ticket';
+import { Order } from '../../../models/order';
 
 describe('Ticket Updated Listener', () => {
   let listener: OrderExpiredListener;

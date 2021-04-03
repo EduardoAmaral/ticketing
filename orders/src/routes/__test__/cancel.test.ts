@@ -2,8 +2,8 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
-import { Ticket } from '../../model/ticket';
-import { Order, OrderStatus } from '../../model/order';
+import { Ticket } from '../../models/ticket';
+import { Order, OrderStatus } from '../../models/order';
 import { natsWrapper } from '@eamaral/ticketing-common';
 
 const ROUTE = '/api/orders/:id/cancel';

@@ -4,8 +4,8 @@ import {
   TicketUpdatedEvent,
 } from '@eamaral/ticketing-common';
 import { Message } from 'node-nats-streaming';
-import { Ticket } from '../../model/ticket';
-import { orderServiceQueueGroupName } from '../queue-group-name';
+import { Ticket } from '../../models/ticket';
+import { orderServiceQueueGroupName } from './queue-group-name';
 
 export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
   subject: Subjects.TicketUpdated = Subjects.TicketUpdated;

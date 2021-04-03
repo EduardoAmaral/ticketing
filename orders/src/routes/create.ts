@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 import mongoose from 'mongoose';
 import { add } from 'date-fns';
 
-import { Ticket } from '../model/ticket';
+import { Ticket } from '../models/ticket';
 import {
   BusinessValidationError,
   NotFoundError,
@@ -11,7 +11,7 @@ import {
   validateRequest,
   natsWrapper,
 } from '@eamaral/ticketing-common';
-import { Order, OrderStatus } from '../model/order';
+import { Order, OrderStatus } from '../models/order';
 import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
 
 const router = express.Router();
