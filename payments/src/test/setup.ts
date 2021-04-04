@@ -2,11 +2,13 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
 jest.mock('@eamaral/ticketing-common/build/nats/nats-wrapper');
+jest.mock('../stripe');
 
 let mongo: any;
 beforeAll(async () => {
   jest.clearAllMocks();
   process.env.JWT_SECRET = 'whatevertestsecret';
+  process.env.STRIPE_SECRET = 'stripesecret';
 
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();

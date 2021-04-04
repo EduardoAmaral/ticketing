@@ -7,6 +7,7 @@ import {
   errorHandler,
   NotFoundError,
 } from '@eamaral/ticketing-common';
+import { createPaymentRouter } from './routes/create';
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(
 );
 
 app.use(currentUser);
+
+app.use(createPaymentRouter);
 
 app.all('*', () => {
   throw new NotFoundError();
