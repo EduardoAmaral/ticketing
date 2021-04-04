@@ -21,7 +21,7 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ticket-secrets
+                  name: ticketing-secrets
                   key: JWT_SECRET
 
 ---

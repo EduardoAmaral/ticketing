@@ -29,8 +29,13 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ticket-secrets
+                  name: ticketing-secrets
                   key: JWT_SECRET
+            - name: STRIPE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ticketing-secrets
+                  key: STRIPE_SECRET
 
 ---
 apiVersion: v1
