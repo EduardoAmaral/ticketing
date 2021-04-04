@@ -1,6 +1,7 @@
 import {
   BusinessValidationError,
   ForbiddenError,
+  natsWrapper,
   NotFoundError,
   OrderStatus,
   requireAuth,
@@ -8,6 +9,7 @@ import {
 } from '@eamaral/ticketing-common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher';
 import { Order } from '../models/order';
 import { Payment } from '../models/payment';
 import { stripe } from '../stripe';
@@ -45,10 +47,17 @@ router.post(
       source: token,
     });
 
-    await Payment.build({
+    const payment = await Payment.build({
       orderId: order.id,
       stripeId: charge.id,
-    }).save();
+    });
+
+    await payment.save();
+
+    new PaymentCreatedPublisher(natsWrapper.client).publish({
+      id: payment.id,
+      orderId: payment.orderId,
+    });
 
     res.status(201).send({});
   }

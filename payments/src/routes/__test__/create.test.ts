@@ -5,6 +5,7 @@ import { getFakeSession } from '../../test/fake-session';
 import { Order, OrderStatus } from '../../models/order';
 import { stripe } from '../../stripe';
 import { Payment } from '../../models/payment';
+import { natsWrapper } from '@eamaral/ticketing-common';
 
 describe('Create Route', () => {
   it('requires authentication', async () => {
@@ -128,5 +129,30 @@ describe('Create Route', () => {
 
     const payment = await Payment.findOne({ orderId });
     expect(payment.stripeId).toBeDefined();
+  });
+
+  it('publishes a payment created event', async () => {
+    const orderId = new mongoose.Types.ObjectId().toHexString();
+    const userId = new mongoose.Types.ObjectId().toHexString();
+
+    await Order.build({
+      id: orderId,
+      price: 1000,
+      userId: userId,
+      version: 1,
+      status: OrderStatus.Created,
+    }).save();
+
+    const response = await request(app)
+      .post('/api/payments')
+      .set('Cookie', getFakeSession(userId))
+      .send({
+        token: 'tok_visa',
+        orderId: orderId,
+      });
+
+    expect(response.status).toEqual(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
