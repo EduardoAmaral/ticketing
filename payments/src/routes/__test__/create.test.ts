@@ -4,6 +4,7 @@ import app from '../../app';
 import { getFakeSession } from '../../test/fake-session';
 import { Order, OrderStatus } from '../../models/order';
 import { stripe } from '../../stripe';
+import { Payment } from '../../models/payment';
 
 describe('Create Route', () => {
   it('requires authentication', async () => {
@@ -124,5 +125,8 @@ describe('Create Route', () => {
     expect(charge.amount).toEqual(order.price);
     expect(charge.currency).toEqual('usd');
     expect(charge.source).toEqual('tok_visa');
+
+    const payment = await Payment.findOne({ orderId });
+    expect(payment.stripeId).toBeDefined();
   });
 });
